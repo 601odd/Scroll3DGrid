@@ -1,9 +1,8 @@
 import { preloadImages, getGrid } from './utils.js'
-let lenis
 
 // 平滑滚动函数
 const initSmoothScrolling = () => {
-	lenis = new Lenis({
+	let lenis = new Lenis({
 		lerp: 0.1, // 值越小平滑效果越明显
 		smoothWheel: true, // 为鼠标滚轮事件启用平滑滚动
 	})
@@ -20,13 +19,9 @@ const initSmoothScrolling = () => {
 	requestAnimationFrame(scrollFn)
 }
 
-const grids = document.querySelectorAll('.grid')
-
 //根据不同的动画类型，在网格（grid）元素上应用滚动触发的动画效果
 const applyAnimation = (grid, animationType) => {
-	// Child elements of grid
 	const gridWrap = grid.querySelector('.grid-wrap')
-	console.log(gridWrap)
 	const gridItems = grid.querySelectorAll('.grid__item')
 	const gridItemsInner = [...gridItems].map(item => item.querySelector('.grid__item-inner'))
 
@@ -41,12 +36,11 @@ const applyAnimation = (grid, animationType) => {
 		},
 	})
 
-	// 定义不同动画
+	// 定义不同动画 属性包括网格的宽度、透视效果、内部元素的缩放比例、网格项的宽高比、列数和间隙
 	switch (animationType) {
 		case 'type1':
 			grid.style.setProperty('--perspective', '1000px')
 			grid.style.setProperty('--grid-inner-scale', '0.5')
-
 			timeline
 				.set(gridWrap, {
 					rotationY: 25,
@@ -74,10 +68,7 @@ const applyAnimation = (grid, animationType) => {
 					},
 					0
 				)
-
 			break
-
-		//属性包括网格的宽度、透视效果、内部元素的缩放比例、网格项的宽高比、列数和间隙
 		case 'type2':
 			grid.style.setProperty('--grid-width', '160%')
 			grid.style.setProperty('--perspective', '2000px')
@@ -132,7 +123,6 @@ const applyAnimation = (grid, animationType) => {
 				)
 
 			break
-
 		case 'type3':
 			grid.style.setProperty('--grid-width', '105%')
 			grid.style.setProperty('--grid-columns', '8')
@@ -175,7 +165,6 @@ const applyAnimation = (grid, animationType) => {
 				)
 
 			break
-
 		case 'type4':
 			grid.style.setProperty('--grid-width', '50%')
 			grid.style.setProperty('--perspective', '3000px')
@@ -228,7 +217,6 @@ const applyAnimation = (grid, animationType) => {
 				)
 
 			break
-
 		case 'type5':
 			grid.style.setProperty('--grid-width', '120%')
 			grid.style.setProperty('--grid-columns', '8')
@@ -279,7 +267,6 @@ const applyAnimation = (grid, animationType) => {
 					'rowsEnd'
 				)
 			break
-
 		case 'type6':
 			grid.style.setProperty('--perspective', '2500px')
 			grid.style.setProperty('--grid-width', '100%')
@@ -304,7 +291,6 @@ const applyAnimation = (grid, animationType) => {
 			)
 
 			break
-
 		default:
 			console.error('Unknown animation type.')
 			break
@@ -313,28 +299,10 @@ const applyAnimation = (grid, animationType) => {
 
 // 给每个grid应用动画
 const scroll = () => {
+	const grids = document.querySelectorAll('.grid')
 	grids.forEach((grid, i) => {
-		let animationType
-		switch (i % 6) {
-			case 0:
-				animationType = 'type1'
-				break
-			case 1:
-				animationType = 'type2'
-				break
-			case 2:
-				animationType = 'type3'
-				break
-			case 3:
-				animationType = 'type4'
-				break
-			case 4:
-				animationType = 'type5'
-				break
-			case 5:
-				animationType = 'type6'
-				break
-		}
+		// type1 ~ type6
+		let animationType = `type${(i % 6) + 1}`
 		applyAnimation(grid, animationType)
 	})
 }
